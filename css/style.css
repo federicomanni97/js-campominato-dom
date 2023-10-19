@@ -1,0 +1,29 @@
+#playground {
+    width: 600px;
+    height: 600px;
+    background-color: black;
+    margin: 50px auto;
+}
+
+button{
+    margin: 0 auto;
+    display: block;
+}
+
+body{
+    background-color: grey;
+}
+
+.square{
+    border: 1px solid white;
+    width: calc(100% / 8);
+    height: calc(100% / 8);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+}
+
+.active{
+    background-color: rgb(59, 255, 157);
+}
