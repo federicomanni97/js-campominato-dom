@@ -27,3 +27,7 @@ body{
 .active{
     background-color: rgb(59, 255, 157);
 }
+
+.bomb{
+    background-color: red;
+}

@@ -18,14 +18,6 @@ const btn = document.getElementById('start');
 let score = 0;
 let bombsToGenerate = 16;
 let bombs = [];
-for (let index = 0; index < bombsToGenerate; index++) {
-    let randomNumber = getRndInteger(1, 49)
-    
-    bombs.push(randomNumber);
-
-
-}
-console.log(bombs);
 
 btn.addEventListener('click', function(){
     //num di quadratini da generare
@@ -38,36 +30,69 @@ btn.addEventListener('click', function(){
         //genero quadratino
         let square = drawSquare(i, numSquare);
         //appendo il quadratino alla griglia
-        playground.append(square);
+        playground.append(square);        
     }
 
-});
+    const max_attempt = numSquare - bombsToGenerate;
 
-function drawSquare(squareIndex, numSquare){
-    let squareWidth = Math.sqrt(numSquare);
-    const square = document.createElement('div');
-    square.classList.add('square');
-    square.style.width = `calc(100% / ${squareWidth})`;
-    square.style.height = square.style.width;
-    square.innerHTML = squareIndex + 1;
-    square.addEventListener('click', function(){
-        square.classList.add('active');
-        console.log(squareIndex + 1);
-        for (let i = 0; i < bombs.length; i++) {
-            if (bombs[i] == squareIndex + 1) {
-                console.log('esploso');
-                
+    for (let index = 0; index < bombsToGenerate; index++) {
+        let randomNumber = getRndInteger(1, numSquare);
+        
+        bombs.push(randomNumber);
+    }
+    console.log(bombs);
+
+    function drawSquare(squareIndex, numSquare, gameOver){
+        let squareWidth = Math.sqrt(numSquare);
+        const square = document.createElement('div');
+        square.classList.add('square');
+        square.style.width = `calc(100% / ${squareWidth})`;
+        square.style.height = square.style.width;
+        square.innerHTML = squareIndex + 1;
+        square.addEventListener('click', function(){
+            square.classList.add('active');
+            let message;
+            for (let i = 0; i < bombs.length; i++) {
+                if (bombs[i] == squareIndex + 1) {
+                    square.classList.add('bomb');
+                    square.innerHTML = '<i class="fa-solid fa-bomb fa-beat-fade"></i>';
+                    
+                    let message = `Hai perso, il tuo punteggio è: ${score}`;
+                    gameOver();
+                } else {
+                    score += 1/16;
+                    
+                    if (score === max_attempt) {
+                        message = `Hai vinto, il tuo punteggio è: ${score}`;
+                        gameOver = true;
+                        gameOver();
+                    } else {
+                        message = `Il tuo punteggio è: ${score}`;
+                    }
+                }
+                document.getElementById("score").innerHTML = message;
             }
-            else {
-                score += 1;
-                console.log(score);
-                return score;
+        });
+        return square;   
+        
+        function gameOver(){
+            const arraySquareBombs = document.getElementsByClassName('square');
+            for (let i = 0; i < arraySquareBombs.length; i++){
+                let el = arraySquareBombs[i];
+                if(bombs.includes(parseInt(el.textContent))){
+                    el.classList.add("bomb");
+                    el.innerHTML = '<i class="fa-solid fa-bomb fa-beat-fade"></i>';
+                }
             }
         }
-    });
-    return square;
+    }    
     
-}
+});
+
+
+
+
+
 
 
 
